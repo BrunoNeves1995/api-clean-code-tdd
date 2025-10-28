@@ -1,4 +1,5 @@
 const MissingParamError = require('../helps/missing-param-error')
+const UnauthorizedError = require('../helps/unauthorized-error')
 const LoginRouter = require('./login-router')
 
 const makeSut = () => {
@@ -69,7 +70,7 @@ describe('lOGIN ROUTER', () => {
     expect(authUseCasespySpy.password).toBe(httpRequest.body.password)
   })
 
-  test('deve retornar 401 quando parâmetros inválidos forem fornecidos -> deve retornar 401 quando parâmetros inválidos forem fornecidos', () => {
+  test('should return 401 when credentials invalid are provided -> deve retornar 401 quando as credenciais inválidos forem fornecidos', () => {
     const { sut } = makeSut()
     const httpRequest = {
       body: {
@@ -80,5 +81,6 @@ describe('lOGIN ROUTER', () => {
 
     const httpResponse = sut.route(httpRequest)
     expect(httpResponse.statusCode).toBe(401)
+    expect(httpResponse.body).toEqual(new UnauthorizedError())
   })
 })
