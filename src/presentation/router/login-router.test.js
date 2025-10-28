@@ -100,6 +100,19 @@ describe('lOGIN ROUTER', () => {
     expect(httpResponse.statusCode).toEqual(200)
   })
 
+  test('should return 200 when credentials valid are provided -> deve retornar 200 quando as credenciais validas forem fornecidos', () => {
+    const { sut, authUseCasespySpy } = makeSut()
+    const httpRequest = {
+      body: {
+        email: 'valid@gmail.com',
+        password: 'valid_password'
+      }
+    }
+
+    const httpResponse = sut.route(httpRequest)
+    expect(httpResponse.body.accessToken).toEqual(authUseCasespySpy.accessToken)
+  })
+
   test('should return 500 if no AuthUseCase is provided -> deve retornar 500 quando as credenciais inválidos forem fornecidos', () => {
     const sut = new LoginRouter()
     const httpRequest = {
