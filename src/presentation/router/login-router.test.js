@@ -7,10 +7,12 @@ const makeSut = () => {
     auth (email, password) {
       this.email = email
       this.password = password
+      return this.accessToken
     }
   }
 
   const authUseCasespySpy = new AuthUseCasespySpy()
+  authUseCasespySpy.accessToken = 'valid_acesss_token'
   const sut = new LoginRouter(authUseCasespySpy)
   return {
     sut,
@@ -71,7 +73,8 @@ describe('lOGIN ROUTER', () => {
   })
 
   test('should return 401 when credentials invalid are provided -> deve retornar 401 quando as credenciais inválidos forem fornecidos', () => {
-    const { sut } = makeSut()
+    const { sut, authUseCasespySpy } = makeSut()
+    authUseCasespySpy.accessToken = null
     const httpRequest = {
       body: {
         email: 'invalid@gmail.com',
@@ -82,6 +85,19 @@ describe('lOGIN ROUTER', () => {
     const httpResponse = sut.route(httpRequest)
     expect(httpResponse.statusCode).toBe(401)
     expect(httpResponse.body).toEqual(new UnauthorizedError())
+  })
+
+  test('should return 200 when credentials valid are provided -> deve retornar 200 quando as credenciais validas forem fornecidos', () => {
+    const { sut } = makeSut()
+    const httpRequest = {
+      body: {
+        email: 'valid@gmail.com',
+        password: 'valid_password'
+      }
+    }
+
+    const httpResponse = sut.route(httpRequest)
+    expect(httpResponse.statusCode).toEqual(200)
   })
 
   test('should return 500 if no AuthUseCase is provided -> deve retornar 500 quando as credenciais inválidos forem fornecidos', () => {
