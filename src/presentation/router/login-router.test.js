@@ -83,4 +83,30 @@ describe('lOGIN ROUTER', () => {
     expect(httpResponse.statusCode).toBe(401)
     expect(httpResponse.body).toEqual(new UnauthorizedError())
   })
+
+  test('should return 500 if no AuthUseCase is provided -> deve retornar 500 quando as credenciais inválidos forem fornecidos', () => {
+    const sut = new LoginRouter()
+    const httpRequest = {
+      body: {
+        email: 'any_email@gmail.com',
+        password: 'any_password'
+      }
+    }
+
+    const httpResponse = sut.route(httpRequest)
+    expect(httpResponse.statusCode).toBe(500)
+  })
+
+  test('should return 500 if no AuthUseCase has no auth method -> deve retornar 500 se o AuthUseCase nao tiver metodo de autenticação', () => {
+    const sut = new LoginRouter({})
+    const httpRequest = {
+      body: {
+        email: 'any_email@gmail.com',
+        password: 'any_password'
+      }
+    }
+
+    const httpResponse = sut.route(httpRequest)
+    expect(httpResponse.statusCode).toBe(500)
+  })
 })
