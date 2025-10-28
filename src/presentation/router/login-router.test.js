@@ -68,4 +68,17 @@ describe('lOGIN ROUTER', () => {
     expect(authUseCasespySpy.email).toBe(httpRequest.body.email)
     expect(authUseCasespySpy.password).toBe(httpRequest.body.password)
   })
+
+  test('deve retornar 401 quando parâmetros inválidos forem fornecidos -> deve retornar 401 quando parâmetros inválidos forem fornecidos', () => {
+    const { sut } = makeSut()
+    const httpRequest = {
+      body: {
+        email: 'invalid@gmail.com',
+        password: 'invalid_password'
+      }
+    }
+
+    const httpResponse = sut.route(httpRequest)
+    expect(httpResponse.statusCode).toBe(401)
+  })
 })
