@@ -9,17 +9,6 @@
   "scripts": {
     "test": "jest"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "*.js": [
-      "standard --fix",
-      "git add"
-    ]
-  },
   "devDependencies": {
     "husky": "^9.1.7",
     "jest": "^30.2.0",
