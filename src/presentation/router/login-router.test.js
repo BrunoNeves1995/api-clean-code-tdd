@@ -4,6 +4,16 @@ const UnauthorizedError = require('../helps/unauthorized-error')
 const LoginRouter = require('./login-router')
 
 const makeSut = () => {
+  const authUseCasespySpy = makeAuthCase()
+  authUseCasespySpy.accessToken = 'valid_acesss_token'
+  const sut = new LoginRouter(authUseCasespySpy)
+  return {
+    sut,
+    authUseCasespySpy
+  }
+}
+
+const makeAuthCase = () => {
   class AuthUseCasespySpy {
     auth (email, password) {
       this.email = email
@@ -11,14 +21,16 @@ const makeSut = () => {
       return this.accessToken
     }
   }
+  return new AuthUseCasespySpy()
+}
 
-  const authUseCasespySpy = new AuthUseCasespySpy()
-  authUseCasespySpy.accessToken = 'valid_acesss_token'
-  const sut = new LoginRouter(authUseCasespySpy)
-  return {
-    sut,
-    authUseCasespySpy
+const makeAuthUseCaseWithError = () => {
+  class AuthUseCasespySpy {
+    auth () {
+      throw new Error()
+    }
   }
+  return new AuthUseCasespySpy()
 }
 
 describe('lOGIN ROUTER', () => {
@@ -130,8 +142,9 @@ describe('lOGIN ROUTER', () => {
     expect(httpResponse.body).toEqual(new ServerError())
   })
 
-  test('should return 500 if no AuthUseCase has no auth method -> deve retornar 500 se o AuthUseCase nao tiver metodo de autenticação', () => {
-    const sut = new LoginRouter({})
+  test('should return 500 if AuthUseCase throws -> deve retornar 500 se AuthUseCase lançar um erro', () => {
+    const authUseCasespySpy = makeAuthUseCaseWithError()
+    const sut = new LoginRouter(authUseCasespySpy)
     const httpRequest = {
       body: {
         email: 'any_email@gmail.com',
@@ -141,6 +154,5 @@ describe('lOGIN ROUTER', () => {
 
     const httpResponse = sut.route(httpRequest)
     expect(httpResponse.statusCode).toBe(500)
-    expect(httpResponse.body).toEqual(new ServerError())
   })
 })
