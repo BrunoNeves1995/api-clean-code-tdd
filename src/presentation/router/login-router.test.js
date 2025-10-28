@@ -1,4 +1,5 @@
 const MissingParamError = require('../helps/missing-param-error')
+const ServerError = require('../helps/server-error ')
 const UnauthorizedError = require('../helps/unauthorized-error')
 const LoginRouter = require('./login-router')
 
@@ -49,6 +50,7 @@ describe('lOGIN ROUTER', () => {
     const { sut } = makeSut()
     const httpResponse = sut.route()
     expect(httpResponse.statusCode).toBe(500)
+    expect(httpResponse.body).toEqual(new ServerError())
   })
 
   test('should return 500 if httpRequest has no body -> deve retornar 500 se httpRequest não tiver corpo', () => {
@@ -56,6 +58,7 @@ describe('lOGIN ROUTER', () => {
     const httpRequest = {}
     const httpResponse = sut.route(httpRequest)
     expect(httpResponse.statusCode).toBe(500)
+    expect(httpResponse.body).toEqual(new ServerError())
   })
 
   test('should call authUseCasespy with correct params -> deve chamar authUseCasespy com os parâmetros corretos', () => {
@@ -124,6 +127,7 @@ describe('lOGIN ROUTER', () => {
 
     const httpResponse = sut.route(httpRequest)
     expect(httpResponse.statusCode).toBe(500)
+    expect(httpResponse.body).toEqual(new ServerError())
   })
 
   test('should return 500 if no AuthUseCase has no auth method -> deve retornar 500 se o AuthUseCase nao tiver metodo de autenticação', () => {
@@ -137,5 +141,6 @@ describe('lOGIN ROUTER', () => {
 
     const httpResponse = sut.route(httpRequest)
     expect(httpResponse.statusCode).toBe(500)
+    expect(httpResponse.body).toEqual(new ServerError())
   })
 })
