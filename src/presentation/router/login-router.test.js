@@ -1,7 +1,4 @@
-const MissingParamError = require('../helps/missing-param-error')
-const InvalidParamError = require('../helps/invalid-param-error')
-const ServerError = require('../helps/server-error ')
-const UnauthorizedError = require('../helps/unauthorized-error')
+const { ServerError, UnauthorizedError, InvalidParamError, MissingParamError } = require('../error')
 const LoginRouter = require('./login-router')
 
 const makeSut = () => {
