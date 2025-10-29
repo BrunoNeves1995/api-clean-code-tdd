@@ -185,4 +185,34 @@ describe('lOGIN ROUTER', () => {
     expect(httpResponse.statusCode).toBe(400)
     expect(httpResponse.body).toEqual(new InvalidParamError('email'))
   })
+
+  test('should return 500 if no EmailValidator is provided -> deve retornar 500 quando as credenciais emailValidator nao for fornecidos', async () => {
+    const authUseCasespySpy = makeAuthCase()
+    const sut = new LoginRouter(authUseCasespySpy, {})
+    const httpRequest = {
+      body: {
+        email: 'any_email@gmail.com',
+        password: 'any_password'
+      }
+    }
+
+    const httpResponse = await sut.route(httpRequest)
+    expect(httpResponse.statusCode).toBe(500)
+    expect(httpResponse.body).toEqual(new ServerError())
+  })
+
+  test('should return 500 if no EmailValidator has no provided -> deve retornar 500 quando o metodoemailValidator nao for fornecidos', async () => {
+    const authUseCasespySpy = makeAuthCase()
+    const sut = new LoginRouter(authUseCasespySpy, {})
+    const httpRequest = {
+      body: {
+        email: 'any_email@gmail.com',
+        password: 'any_password'
+      }
+    }
+
+    const httpResponse = await sut.route(httpRequest)
+    expect(httpResponse.statusCode).toBe(500)
+    expect(httpResponse.body).toEqual(new ServerError())
+  })
 })
