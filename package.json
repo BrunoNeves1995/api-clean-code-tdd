@@ -7,8 +7,8 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "test": "jest --watchAll",
-    "test:staged": "jest"
+    "test": "jest --watchAll --silent --noStackTrace",
+    "test:staged": "jest --findRelatedTests --silent --noStackTrace"
   },
   "standard": {
     "env": [
