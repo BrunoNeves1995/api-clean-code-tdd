@@ -251,6 +251,6 @@ describe('lOGIN ROUTER', () => {
     }
 
     await sut.route(httpRequest)
-    expect(emailValidatorSpy.email).toBe(httpRequest.body.password)
+    expect(emailValidatorSpy.email).toBe(httpRequest.body.email)
   })
 })
